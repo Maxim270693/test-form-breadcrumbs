@@ -15,28 +15,22 @@ type SignUpInfoType = {
 const SignUpInfo = ({onChange, phone}: SignUpInfoType) => {
     const dispatch = useDispatch();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [repeatPassword, setRepeatPassword] = useState('');
+    const [signUpForm, setSignUpForm] = useState({
+        email: '',
+        password: '',
+        repeatPassword: ''
+    });
 
+    const {email, password, repeatPassword} = signUpForm
 
     const isError = useAppSelector<string>(state => state.signUp.isError);
     const form = useAppSelector<JSONSchemeType>(state => state.common.form);
 
-    const onChangeEmailHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setEmail(event.currentTarget.value);
-        dispatch(isErrorAC(''));
+    const onChangeInputsHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        return setSignUpForm(prev => ({...prev, [event.target.name]: event.target.value}))
     };
 
-    const onChangePasswordHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setPassword(event.currentTarget.value);
-        dispatch(isErrorAC(''));
-    };
-
-    const onChangeRepeatPasswordHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setRepeatPassword(event.currentTarget.value);
-        dispatch(isErrorAC(''));
-    };
+    console.log('signUpForm', signUpForm)
 
     const validateDate = (event: FormEvent<HTMLFormElement>) => {
         console.log(event)
@@ -72,28 +66,31 @@ const SignUpInfo = ({onChange, phone}: SignUpInfoType) => {
             <form className="d-flex flex-column w-25" onSubmit={validateDate}>
                 <MaskedInput
                     mask={['+', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/]}
+                    name="phone"
                     onChange={onChange}
                     value={phone}
                     placeholder="Mobile phone"
-                    name={"phone"}
                     className="form-control mb-3 w-100"
                 />
                 <input type="email"
+                       name="email"
                        placeholder="Email"
                        value={email}
-                       onChange={onChangeEmailHandler}
+                       onChange={onChangeInputsHandler}
                        className="form-control mb-3 w-100"
                 />
                 <input type="password"
+                       name="password"
                        placeholder="Password"
                        value={password}
-                       onChange={onChangePasswordHandler}
+                       onChange={onChangeInputsHandler}
                        className="form-control mb-3 w-100"
                 />
                 <input type="password"
+                       name="repeatPassword"
                        placeholder="Repeat Password"
                        value={repeatPassword}
-                       onChange={onChangeRepeatPasswordHandler}
+                       onChange={onChangeInputsHandler}
                        className="form-control mb-2 w-100"
                 />
 

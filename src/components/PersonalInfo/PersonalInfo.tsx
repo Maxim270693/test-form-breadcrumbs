@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FormEvent, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useEffect, useRef, useState} from 'react';
 import './PersonalInfo.scss';
 import '../SignUpInfo/SignUpInfo.scss';
 import {useDispatch} from "react-redux";
@@ -52,11 +52,21 @@ const PersonalInfo = () => {
                 />
 
                 <div className="input-group-btn mb-3" data-toggle="buttons">
-                    <label className="btn btn-primary active me-2">
-                        <input type="radio" name="sex" id="sexFemale" autoComplete="off"/>Female
+                    <label className="btn btn-primary me-2">
+                        <input type="radio"
+                               name="sex"
+                               id="sexFemale"
+                               autoComplete="off"
+                        />
+                        Female
                     </label>
                     <label className="btn btn-primary">
-                        <input type="radio" name="sex" id="sexMale" autoComplete="off"/>Male
+                        <input type="radio"
+                               name="sex"
+                               id="sexMale"
+                               autoComplete="off"
+                        />
+                        Male
                     </label>
                 </div>
 
@@ -74,13 +84,15 @@ const PersonalInfo = () => {
 
                 <div className="d-flex flex-wrap mb-3">
                     <div className="form-check me-2">
-                        <input className="form-check-input" type="checkbox" id="Sport" name="option1"
+                        <input className="form-check-input" type="checkbox" id="Sport"
+                               name="option1"
                                value="Sport"/>
                         <label className="form-check-label">Sport</label>
                     </div>
 
                     <div className="form-check me-2">
-                        <input className="form-check-input" type="checkbox" id="Beauty" name="option1"
+                        <input className="form-check-input" type="checkbox" id="Beauty"
+                               name="option1"
                                value="Beauty"/>
                         <label className="form-check-label">Beauty</label>
                     </div>
@@ -102,8 +114,11 @@ const PersonalInfo = () => {
 
                 <button className="btn btn-warning mb-2"
                         onClick={() => dispatch(stepAC('SignUpInfo'))}
-                >change</button>
-                <button className="btn btn-success">complete</button>
+                >change
+                </button>
+                <button className="btn btn-success"
+                >complete
+                </button>
             </form>
         </div>
     );
