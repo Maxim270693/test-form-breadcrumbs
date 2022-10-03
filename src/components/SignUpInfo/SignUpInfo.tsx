@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import React, {FormEvent, useEffect} from 'react';
 import MaskedInput from 'react-text-mask';
 import {useDispatch} from "react-redux";
 import {isErrorAC, stepAC} from "../../bll/actions/actions";
@@ -7,30 +7,25 @@ import {useAppSelector} from "../../bll/store/store";
 import {getSchema} from "../../bll/thunks/thunks";
 import {JSONSchemeType} from "../../types/types";
 
-type SignUpInfoType = {
+type SignUpForm = {
     phone: string,
-    onChange: (event: any) => void
+    email: string,
+    password: string,
+    repeatPassword: string,
 }
 
-const SignUpInfo = ({onChange, phone}: SignUpInfoType) => {
+type SignUpInfoType = {
+    signUpForm: SignUpForm,
+    onChangeInputsHandler: (event: any) => void
+}
+
+const SignUpInfo = ({signUpForm, onChangeInputsHandler}: SignUpInfoType) => {
     const dispatch = useDispatch();
 
-    const [signUpForm, setSignUpForm] = useState({
-        email: '',
-        password: '',
-        repeatPassword: ''
-    });
-
-    const {email, password, repeatPassword} = signUpForm
+    const {phone, email, password, repeatPassword} = signUpForm
 
     const isError = useAppSelector<string>(state => state.signUp.isError);
     const form = useAppSelector<JSONSchemeType>(state => state.common.form);
-
-    const onChangeInputsHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        return setSignUpForm(prev => ({...prev, [event.target.name]: event.target.value}))
-    };
-
-    console.log('signUpForm', signUpForm)
 
     const validateDate = (event: FormEvent<HTMLFormElement>) => {
         console.log(event)
@@ -67,7 +62,7 @@ const SignUpInfo = ({onChange, phone}: SignUpInfoType) => {
                 <MaskedInput
                     mask={['+', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/]}
                     name="phone"
-                    onChange={onChange}
+                    onChange={onChangeInputsHandler}
                     value={phone}
                     placeholder="Mobile phone"
                     className="form-control mb-3 w-100"

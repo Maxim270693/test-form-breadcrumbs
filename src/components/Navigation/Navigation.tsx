@@ -4,7 +4,7 @@ import {StepType} from "../../types/types";
 import {useDispatch} from "react-redux";
 import {stepAC} from "../../bll/actions/actions";
 
-export const Navigation = () => {
+const Navigation = () => {
     const dispatch = useDispatch();
 
     const currentStep = useAppSelector<StepType>(state => state.common.step);
@@ -21,3 +21,5 @@ export const Navigation = () => {
         </ol>
     </nav>;
 };
+
+export default React.memo(Navigation);

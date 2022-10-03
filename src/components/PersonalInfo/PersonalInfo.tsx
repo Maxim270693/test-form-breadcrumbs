@@ -1,27 +1,42 @@
-import React, {ChangeEvent, FormEvent, useEffect, useRef, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useState} from 'react';
 import './PersonalInfo.scss';
 import '../SignUpInfo/SignUpInfo.scss';
 import {useDispatch} from "react-redux";
 import Error from "../Error/Error";
 import {useAppSelector} from "../../bll/store/store";
 import {stepAC} from "../../bll/actions/actions";
+import {JSONSchemeType} from "../../types/types";
 
 const PersonalInfo = () => {
     const dispatch = useDispatch();
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [personalInfoForm, setPersonalInfoForm] = useState({
+        firstName: '',
+        lastName: '',
+        female: '',
+        male: '',
+        date: '',
+        optionsOcean: '',
+        hobby: ['Sport', 'Beauty', 'IT', 'Pets'],
+    });
+
+    const {firstName, lastName, female, male, date, optionsOcean} = personalInfoForm;
 
     const isError = useAppSelector<string>(state => state.signUp.isError);
+    const form = useAppSelector<JSONSchemeType>(state => state.common.form);
 
+    const {ocean} = form;
+    const {oneOf} = ocean;
 
-    const onFirstNameHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setFirstName(event.currentTarget.value);
-    }
+    const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        setPersonalInfoForm(prev => ({
+            ...prev, [event.target.name]: event.target.value
+        }))
+    };
 
-    const onLastNameHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setLastName(event.currentTarget.value);
-    }
+    const onChangeCheckboxHandler = (event: ChangeEvent<HTMLInputElement>) => {
+
+    };
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -33,21 +48,27 @@ const PersonalInfo = () => {
         }
     }
 
+    const options = oneOf.map((item, index) => {
+        return <option key={index} value={item}>{item}</option>
+    })
+
     return (
         <div className="d-flex flex-column align-items-center">
             <h1>PersonalInfo</h1>
             <form className="d-flex flex-column w-25" onSubmit={handleSubmit}>
                 <input type="text"
                        placeholder="First Name"
+                       name="firstName"
                        value={firstName}
-                       onChange={onFirstNameHandler}
+                       onChange={onChangeHandler}
                        className="form-control mb-3 w-100"
                     // maxLength={schema.firsName.max}
                 />
                 <input type="text"
                        placeholder="Last Name"
+                       name="lastName"
                        value={lastName}
-                       onChange={onLastNameHandler}
+                       onChange={onChangeHandler}
                        className="form-control mb-3 w-100"
                 />
 
@@ -55,6 +76,8 @@ const PersonalInfo = () => {
                     <label className="btn btn-primary me-2">
                         <input type="radio"
                                name="sex"
+                            // value={female}
+                            // onChange={onChangeHandler}
                                id="sexFemale"
                                autoComplete="off"
                         />
@@ -63,6 +86,8 @@ const PersonalInfo = () => {
                     <label className="btn btn-primary">
                         <input type="radio"
                                name="sex"
+                            // value={male}
+                            // onChange={onChangeHandler}
                                id="sexMale"
                                autoComplete="off"
                         />
@@ -71,40 +96,49 @@ const PersonalInfo = () => {
                 </div>
 
                 <input type="date"
+                       name="date"
+                       value={date}
+                       onChange={onChangeHandler}
                        className="form-control mb-3 w-100"
                 />
 
-                <select className="form-select mb-3 w-100">
-                    schema.ocean.map(
-                    <option value="">Atlantic</option>
-                    <option value="">Pacific</option>
-                    <option value="">Indian</option>
-                    <option value="">Arctic</option>
+                <select className="form-select mb-3 w-100"
+                        name="optionsOcean"
+                        value={optionsOcean}
+                    //@ts-ignore
+                        onChange={onChangeHandler}>
+                    {options}
                 </select>
 
                 <div className="d-flex flex-wrap mb-3">
                     <div className="form-check me-2">
-                        <input className="form-check-input" type="checkbox" id="Sport"
-                               name="option1"
+                        <input className="form-check-input" type="checkbox"
+                               name="Sport"
                                value="Sport"/>
                         <label className="form-check-label">Sport</label>
                     </div>
 
                     <div className="form-check me-2">
-                        <input className="form-check-input" type="checkbox" id="Beauty"
-                               name="option1"
+                        <input className="form-check-input" type="checkbox"
+                               name="Beauty"
                                value="Beauty"/>
                         <label className="form-check-label">Beauty</label>
                     </div>
 
                     <div className="form-check me-2">
-                        <input className="form-check-input" type="checkbox" id="IT" name="option1"
+                        <input className="form-check-input"
+                               type="checkbox"
+                               name="hobby"
+                               onChange={onChangeCheckboxHandler}
                                value="IT"/>
                         <label className="form-check-label">IT</label>
                     </div>
 
                     <div className="form-check me-2">
-                        <input className="form-check-input" type="checkbox" id="Pets" name="option1"
+                        <input className="form-check-input"
+                               type="checkbox"
+                               name="Pets"
+                               onChange={onChangeHandler}
                                value="Pets"/>
                         <label className="form-check-label">Pets</label>
                     </div>
@@ -117,6 +151,8 @@ const PersonalInfo = () => {
                 >change
                 </button>
                 <button className="btn btn-success"
+                        onClick={() => {
+                        }}
                 >complete
                 </button>
             </form>

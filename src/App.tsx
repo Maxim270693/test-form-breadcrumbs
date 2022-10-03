@@ -1,17 +1,22 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import './App.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 import SignUpInfo from "./components/SignUpInfo/SignUpInfo";
 import PersonalInfo from "./components/PersonalInfo/PersonalInfo";
 import SingleStep from "./components/SingleStep/SingleStep";
-import {Navigation} from "./components/Navigation/Navigation";
+import Navigation from "./components/Navigation/Navigation";
 
 function App() {
-    const [phone, setPhone] = useState('');
+    const [signUpForm, setSignUpForm] = useState({
+        phone: '',
+        email: '',
+        password: '',
+        repeatPassword: ''
+    });
 
-    const onChange = (event: any) => {
-        setPhone(event.target.value)
-    }
+    const onChangeInputsHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        return setSignUpForm(prev => ({...prev, [event.target.name]: event.target.value}))
+    };
 
     return (
         <div className="App">
@@ -20,8 +25,8 @@ function App() {
             </div>
             <Navigation/>
             <SingleStep step="SignUpInfo">
-                <SignUpInfo phone={phone}
-                            onChange={onChange}/>
+                <SignUpInfo signUpForm={signUpForm}
+                            onChangeInputsHandler={onChangeInputsHandler}/>
             </SingleStep>
             <SingleStep step="PersonalInfo">
                 <PersonalInfo/>

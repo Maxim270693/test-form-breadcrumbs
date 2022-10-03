@@ -1,5 +1,5 @@
-import {InitialStateType, ActionsType, StepType, JSONSchemeType} from "../../types/types";
-import {GET_FORM_DATA, IS_LOADING, IS_ERROR, STEP} from "../../constants/constants";
+import {ActionsType, InitialStateType} from "../../types/types";
+import {IS_ERROR, IS_LOADING} from "../../constants/constants";
 
 export const initialState = {
     isLoading: false,
