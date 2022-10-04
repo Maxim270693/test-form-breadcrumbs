@@ -7,6 +7,7 @@ import {useAppSelector} from "../../bll/store/store";
 import {isErrorAC, stepAC} from "../../bll/actions/actions";
 import {JSONSchemeType} from "../../types/types";
 import {JSONScheme} from "../../constants/JSONScheme";
+import CheckBox from "../CheckBox/CheckBox";
 
 const PersonalInfo = () => {
     const dispatch = useDispatch();
@@ -17,16 +18,17 @@ const PersonalInfo = () => {
         date: '',
         optionsOcean: 'Atlantic',
         sex: '',
-        hobby: ['Sport', 'Beauty', 'IT', 'Pets'],
+        hobbyAnyOf: '',
     });
 
-    const {firstName, lastName, date, optionsOcean} = personalInfoForm;
+    const {firstName, lastName, date, optionsOcean, hobbyAnyOf} = personalInfoForm;
 
     const isError = useAppSelector<string>(state => state.signUp.isError);
     const form = useAppSelector<JSONSchemeType>(state => state.common.form);
 
-    const {ocean} = form;
+    const {ocean, hobby} = form;
     const {oneOf} = ocean;
+    const {anyOf} = hobby;
 
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setPersonalInfoForm(prev => ({
@@ -49,8 +51,8 @@ const PersonalInfo = () => {
     const month = dateNow.getMonth() + 1;
     const year = dateNow.getFullYear();
 
-    let minYear = year - +JSONScheme.birthday.maxAge;
-    let maxYear = year - +JSONScheme.birthday.minAge;
+    const minYear = year - +JSONScheme.birthday.maxAge;
+    const maxYear = year - +JSONScheme.birthday.minAge;
 
     const min = `${minYear}-${day}-${month}`;
     const max = `${maxYear}-${day}-${month}`;
@@ -130,37 +132,10 @@ const PersonalInfo = () => {
                     {options}
                 </select>
 
-                <div className="d-flex flex-wrap">
-                    <div className="form-check me-2">
-                        <input className="form-check-input" type="checkbox"
-                               name="Sport"
-                               value="Sport"/>
-                        <label className="form-check-label">Sport</label>
-                    </div>
-
-                    <div className="form-check me-2">
-                        <input className="form-check-input" type="checkbox"
-                               name="Beauty"
-                               value="Beauty"/>
-                        <label className="form-check-label">Beauty</label>
-                    </div>
-
-                    <div className="form-check me-2">
-                        <input className="form-check-input"
-                               type="checkbox"
-                               name="hobby"
-                               value="IT"/>
-                        <label className="form-check-label">IT</label>
-                    </div>
-
-                    <div className="form-check me-2">
-                        <input className="form-check-input"
-                               type="checkbox"
-                               name="Pets"
-                               value="Pets"/>
-                        <label className="form-check-label">Pets</label>
-                    </div>
-                </div>
+               <CheckBox setPersonalInfoForm={setPersonalInfoForm}
+                         anyOf={anyOf}
+                         hobbyAnyOf={hobbyAnyOf}
+               />
 
                 {isError && <Error>{isError}</Error>}
 
