@@ -4,8 +4,9 @@ import '../SignUpInfo/SignUpInfo.scss';
 import {useDispatch} from "react-redux";
 import Error from "../Error/Error";
 import {useAppSelector} from "../../bll/store/store";
-import {stepAC} from "../../bll/actions/actions";
+import {isErrorAC, stepAC} from "../../bll/actions/actions";
 import {JSONSchemeType} from "../../types/types";
+import {JSONScheme} from "../../constants/JSONScheme";
 
 const PersonalInfo = () => {
     const dispatch = useDispatch();
@@ -13,14 +14,13 @@ const PersonalInfo = () => {
     const [personalInfoForm, setPersonalInfoForm] = useState({
         firstName: '',
         lastName: '',
-        female: '',
-        male: '',
         date: '',
-        optionsOcean: '',
+        optionsOcean: 'Atlantic',
+        sex: '',
         hobby: ['Sport', 'Beauty', 'IT', 'Pets'],
     });
 
-    const {firstName, lastName, female, male, date, optionsOcean} = personalInfoForm;
+    const {firstName, lastName, date, optionsOcean} = personalInfoForm;
 
     const isError = useAppSelector<string>(state => state.signUp.isError);
     const form = useAppSelector<JSONSchemeType>(state => state.common.form);
@@ -32,25 +32,39 @@ const PersonalInfo = () => {
         setPersonalInfoForm(prev => ({
             ...prev, [event.target.name]: event.target.value
         }))
+        dispatch(isErrorAC(''))
     };
 
-    const onChangeCheckboxHandler = (event: ChangeEvent<HTMLInputElement>) => {
-
-    };
-
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if (firstName.length > 2 || firstName.length < 30) {
-            // dispatch(isErrorAC(true));
-        }
-        if (lastName.length > 2 || lastName.length < 30) {
-            // dispatch(isErrorAC(true));
-        }
+    const showForm = () => {
+        console.log('personalInfoForm', personalInfoForm)
     }
 
     const options = oneOf.map((item, index) => {
         return <option key={index} value={item}>{item}</option>
     })
+
+
+    let dateNow = new Date();
+    const day = dateNow.getDate();
+    const month = dateNow.getMonth() + 1;
+    const year = dateNow.getFullYear();
+
+    let minYear = year - +JSONScheme.birthday.maxAge;
+    let maxYear = year - +JSONScheme.birthday.minAge;
+
+    const min = `${minYear}-${day}-${month}`;
+    const max = `${maxYear}-${day}-${month}`;
+
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        showForm();
+        if (personalInfoForm.date > max) {
+            dispatch(isErrorAC(`Age cannot be more than ${JSONScheme.birthday.minAge} years`))
+        }
+        if (personalInfoForm.date < min) {
+            dispatch(isErrorAC(`Age cannot be less than ${JSONScheme.birthday.maxAge} years`))
+        }
+    }
 
     return (
         <div className="d-flex flex-column align-items-center">
@@ -62,7 +76,9 @@ const PersonalInfo = () => {
                        value={firstName}
                        onChange={onChangeHandler}
                        className="form-control mb-3 w-100"
-                    // maxLength={schema.firsName.max}
+                       required
+                       minLength={JSON.parse(JSONScheme.firstName.minLength)}
+                       maxLength={JSON.parse(JSONScheme.firstName.maxLength)}
                 />
                 <input type="text"
                        placeholder="Last Name"
@@ -70,14 +86,17 @@ const PersonalInfo = () => {
                        value={lastName}
                        onChange={onChangeHandler}
                        className="form-control mb-3 w-100"
+                       required
+                       minLength={JSON.parse(JSONScheme.firstName.minLength)}
+                       maxLength={JSON.parse(JSONScheme.firstName.maxLength)}
                 />
 
                 <div className="input-group-btn mb-3" data-toggle="buttons">
                     <label className="btn btn-primary me-2">
                         <input type="radio"
                                name="sex"
-                            // value={female}
-                            // onChange={onChangeHandler}
+                               value="female"
+                               onChange={onChangeHandler}
                                id="sexFemale"
                                autoComplete="off"
                         />
@@ -86,8 +105,8 @@ const PersonalInfo = () => {
                     <label className="btn btn-primary">
                         <input type="radio"
                                name="sex"
-                            // value={male}
-                            // onChange={onChangeHandler}
+                               value="male"
+                               onChange={onChangeHandler}
                                id="sexMale"
                                autoComplete="off"
                         />
@@ -100,6 +119,7 @@ const PersonalInfo = () => {
                        value={date}
                        onChange={onChangeHandler}
                        className="form-control mb-3 w-100"
+                       required
                 />
 
                 <select className="form-select mb-3 w-100"
@@ -110,7 +130,7 @@ const PersonalInfo = () => {
                     {options}
                 </select>
 
-                <div className="d-flex flex-wrap mb-3">
+                <div className="d-flex flex-wrap">
                     <div className="form-check me-2">
                         <input className="form-check-input" type="checkbox"
                                name="Sport"
@@ -129,7 +149,6 @@ const PersonalInfo = () => {
                         <input className="form-check-input"
                                type="checkbox"
                                name="hobby"
-                               onChange={onChangeCheckboxHandler}
                                value="IT"/>
                         <label className="form-check-label">IT</label>
                     </div>
@@ -138,23 +157,18 @@ const PersonalInfo = () => {
                         <input className="form-check-input"
                                type="checkbox"
                                name="Pets"
-                               onChange={onChangeHandler}
                                value="Pets"/>
                         <label className="form-check-label">Pets</label>
                     </div>
                 </div>
 
-                {isError && <Error/>}
+                {isError && <Error>{isError}</Error>}
 
-                <button className="btn btn-warning mb-2"
+                <button className="btn btn-warning mb-2 mt-2"
                         onClick={() => dispatch(stepAC('SignUpInfo'))}
                 >change
                 </button>
-                <button className="btn btn-success"
-                        onClick={() => {
-                        }}
-                >complete
-                </button>
+                <button className="btn btn-success">complete</button>
             </form>
         </div>
     );
