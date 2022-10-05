@@ -12,23 +12,22 @@ type SignUpForm = {
     email: string,
     password: string,
     repeatPassword: string,
-}
+};
 
 type SignUpInfoType = {
     signUpForm: SignUpForm,
     onChangeInputsHandler: (event: any) => void
-}
+};
 
 const SignUpInfo = ({signUpForm, onChangeInputsHandler}: SignUpInfoType) => {
     const dispatch = useDispatch();
 
-    const {phone, email, password, repeatPassword} = signUpForm
+    const {phone, email, password, repeatPassword} = signUpForm;
 
-    const isError = useAppSelector<string>(state => state.signUp.isError);
+    const isError = useAppSelector<string>(state => state.common.isError);
     const form = useAppSelector<JSONSchemeType>(state => state.common.form);
 
     const validateDate = (event: FormEvent<HTMLFormElement>) => {
-        console.log(event)
         event.preventDefault();
         if (!phone) {
             return dispatch(isErrorAC(("Поле Mobile phone не может быть пустым")));

@@ -1,6 +1,6 @@
 import {rootReducer} from "../bll/store/store";
 import {initialState} from "../bll/reducer/signUpReducer";
-import {getDataAC, isErrorAC, isLoadingAC, stepAC} from "../bll/actions/actions";
+import {getDataAC, isErrorAC, isLoadingAC, isShowModalAC, stepAC} from "../bll/actions/actions";
 
 // type store
 export type RootStateType = ReturnType<typeof rootReducer>;
@@ -9,6 +9,9 @@ export type RootStateType = ReturnType<typeof rootReducer>;
 export type InitialStateType = typeof initialState;
 
 // type ActionsType
+export type ActionsInfoType =
+    IsShowModalActionType
+
 export type ActionsType =
     IsErrorActionType
     | IsLoadingActionType
@@ -19,6 +22,7 @@ type GetDataActionType = ReturnType<typeof getDataAC>;
 type IsLoadingActionType = ReturnType<typeof isLoadingAC>;
 type IsErrorActionType = ReturnType<typeof isErrorAC>;
 type stepActionType = ReturnType<typeof stepAC>;
+type IsShowModalActionType = ReturnType<typeof isShowModalAC>
 
 // type step
 export type StepType = 'SignUpInfo' | 'PersonalInfo';
@@ -60,22 +64,12 @@ type BirthdayType = {
 
 type OceanType = {
     required: boolean,
-    oneOf: [
-        string,
-        string,
-        string,
-        string,
-    ]
+    oneOf: string[],
 }
 
 type HobbyType = {
     required: boolean,
-    anyOf: [
-        string,
-        string,
-        string,
-        string,
-    ]
+    anyOf: string[],
 }
 
 type SexType = {
@@ -92,5 +86,15 @@ export type JSONSchemeType = {
     ocean: OceanType,
     hobby: HobbyType,
     sex: SexType,
+}
+
+// type personalInfoForm
+export type PersonalInfoFormType = {
+    firstName: string,
+    lastName: string,
+    date: string,
+    optionsOcean: string,
+    sex: string,
+    hobbyAnyOf: string,
 }
 

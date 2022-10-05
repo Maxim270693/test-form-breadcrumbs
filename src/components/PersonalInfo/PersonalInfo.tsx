@@ -4,15 +4,16 @@ import '../SignUpInfo/SignUpInfo.scss';
 import {useDispatch} from "react-redux";
 import Error from "../Error/Error";
 import {useAppSelector} from "../../bll/store/store";
-import {isErrorAC, stepAC} from "../../bll/actions/actions";
-import {JSONSchemeType} from "../../types/types";
+import {isErrorAC, isShowModalAC, stepAC} from "../../bll/actions/actions";
+import {JSONSchemeType, PersonalInfoFormType} from "../../types/types";
 import {JSONScheme} from "../../constants/JSONScheme";
 import CheckBox from "../CheckBox/CheckBox";
+import ModalComponent from "../Modal/Modal";
 
 const PersonalInfo = () => {
     const dispatch = useDispatch();
 
-    const [personalInfoForm, setPersonalInfoForm] = useState({
+    const [personalInfoForm, setPersonalInfoForm] = useState<PersonalInfoFormType>({
         firstName: '',
         lastName: '',
         date: '',
@@ -23,8 +24,9 @@ const PersonalInfo = () => {
 
     const {firstName, lastName, date, optionsOcean, hobbyAnyOf} = personalInfoForm;
 
-    const isError = useAppSelector<string>(state => state.signUp.isError);
+    const isError = useAppSelector<string>(state => state.common.isError);
     const form = useAppSelector<JSONSchemeType>(state => state.common.form);
+    const isShowModal = useAppSelector<boolean>(state => state.info.isShowModal);
 
     const {ocean, hobby} = form;
     const {oneOf} = ocean;
@@ -39,6 +41,7 @@ const PersonalInfo = () => {
 
     const showForm = () => {
         console.log('personalInfoForm', personalInfoForm)
+        dispatch(isShowModalAC(true))
     }
 
     const options = oneOf.map((item, index) => {
@@ -67,6 +70,8 @@ const PersonalInfo = () => {
             dispatch(isErrorAC(`Age cannot be less than ${JSONScheme.birthday.maxAge} years`))
         }
     }
+
+    console.log('personalInfoForm', personalInfoForm)
 
     return (
         <div className="d-flex flex-column align-items-center">
@@ -136,6 +141,8 @@ const PersonalInfo = () => {
                          anyOf={anyOf}
                          hobbyAnyOf={hobbyAnyOf}
                />
+
+                {isShowModal && <ModalComponent personalInfoForm={personalInfoForm}/>}
 
                 {isError && <Error>{isError}</Error>}
 

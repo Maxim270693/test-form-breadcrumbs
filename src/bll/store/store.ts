@@ -5,10 +5,12 @@ import {TypedUseSelectorHook} from "react-redux/es/types";
 import {RootStateType} from "../../types/types";
 import thunk from "redux-thunk";
 import {commonReducer} from "../reducer/commonReducer";
+import {personalInfoReducer} from "../reducer/personalInfoReducer";
 
 export const rootReducer = combineReducers({
-    signUp: signUpReducer,
     common: commonReducer,
+    signUp: signUpReducer,
+    info: personalInfoReducer,
 });
 
 export const store = createStore(rootReducer, applyMiddleware(thunk));
