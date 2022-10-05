@@ -26,15 +26,29 @@ const ModalComponent = ({personalInfoForm}: PersonalInfoFormPropsType) => {
             keyboard={false}
         >
             <Modal.Header closeButton>
-                <Modal.Title>Your Data</Modal.Title>
+                <Modal.Title>Contact Us</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div>FirstName: {firstName}</div>
-                <div>LastName: {lastName}</div>
-                <div>Birthday: {date}</div>
-                <div>Ocean: {optionsOcean}</div>
-                <div>Gender: {sex}</div>
-                <div>Hobby: {hobbyAnyOf}</div>
+                <div>
+                    <span>FirstName: </span>
+                    <span style={{color: 'brown'}}>{firstName}</span>
+                </div>
+                <div>
+                    <span>LastName: </span>
+                    <span style={{color: 'brown'}}>{lastName}</span>
+                </div>
+                <div>
+                    <span>Ocean: </span>
+                    <span style={{color: 'brown'}}>{optionsOcean}</span>
+                </div>
+                <div>
+                    <span>Gender: </span>
+                    <span style={{color: 'brown'}}>{sex}</span>
+                </div>
+                <div>
+                    <span>Hobby: </span>
+                    <span style={{color: 'brown'}}>{hobbyAnyOf}</span>
+                </div>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary"
